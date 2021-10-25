@@ -1,0 +1,59 @@
+body {
+    background-color: #282c34;
+    color: white;
+    height: 100vh;
+}
+
+h1 {
+    font-size: 33px;
+}
+
+h3 {
+    font-size: 23px;
+}
+
+a {
+    font-size: 18px;
+    text-decoration: none;
+    color: white;
+    border: solid #2B71F4 2px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+a:hover {
+    color: #2B71F4;
+}
+
+#login {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.center2 {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+span {
+   font-size: 23px;
+}
+
+.start {
+    color: greenyellow;
+}
+
+.stop {
+    color: red;
+}

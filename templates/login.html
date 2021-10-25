@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="dashbord for worm-neural"
+    />
+    <title>Neural-Dash</title>
+  </head>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="m-4" id="login">
+      <h1>Neural Dash</h1>
+      <h3 class="mb-2 text-end">login</h3>
+      <form action='/' method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Username</label>
+          <input type="username" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">Default user is root.</div>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <button type="submit" value="update_state" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

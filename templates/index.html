@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="dashbord for worm-neural"
+    />
+    <title>Neural-Dash</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="center2" id="header">
+      <h1 class="">Server: gpu_neural2</h1>
+      <div>
+        <form action='/dashboard' method="post">
+          {% if (state == "stopped" or state == "stopping")  %}
+            {% set state_class = "stop" %}
+          {% else %}
+            {% set state_class = "start" %}
+          {% endif %}
+          <button type="submit" value="update_state" name="state" class="btn btn-primary">Start</button>
+          <span class="ms-3">Current state: <span class="{{ state_class }}">{{ state }}</span></span>
+        </form>
+      </div>
+      <div class="text-end">
+        <a href="http://54.188.14.58/">Visit Website</a>
+      </div>
+    </div>
+    <div class="center">
+      <form action="/dashboard" method="post" >
+        <button type="submit" value="refresh" name="refresh" class="btn btn-info">Refresh</button>
+      </form>
+    </div>
+  </body>
+</html>
