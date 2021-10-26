@@ -50,10 +50,10 @@ span {
    font-size: 23px;
 }
 
-.start {
+.start-color {
     color: greenyellow;
 }
 
-.stop {
+.stop-color {
     color: red;
 }

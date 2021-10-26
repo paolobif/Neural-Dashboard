@@ -19,16 +19,18 @@
       <div>
         <form action='/dashboard' method="post">
           {% if (state == "stopped" or state == "stopping")  %}
-            {% set state_class = "stop" %}
+            {% set state_class = "stop-color" %}
+            {% set button_name = "Start" %}
           {% else %}
-            {% set state_class = "start" %}
+            {% set state_class = "start-color" %}
+            {% set button_name = "Stop" %}
           {% endif %}
-          <button type="submit" value="update_state" name="state" class="btn btn-primary">Start</button>
+          <button type="submit" value="update_state" name="state" class="btn btn-primary">{{ button_name }}</button>
           <span class="ms-3">Current state: <span class="{{ state_class }}">{{ state }}</span></span>
         </form>
       </div>
       <div class="text-end">
-        <a href="http://54.188.14.58/">Visit Website</a>
+        <a href="{{ ip }}">Visit Website</a>
       </div>
     </div>
     <div class="center">

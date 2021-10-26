@@ -3,15 +3,27 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from functools import wraps
 import boto3
+import argparse
 
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SECRET_KEY'] = '123'
+app.config['SECRET_KEY'] = '123testest'
 socketio = SocketIO(app)
 CORS(app)
 
 ec2 = boto3.resource('ec2')  # Inits connection to aws.
 instance_id = 'i-0463a4a99fdb1a7f9'
+
+# Add arguments
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('ec2_id', metavar='N', type=str, nargs='+',
+                help='id for the ec2 instance')
+args = parser.parse_args()
+
+# Instance constants
+instance_id = args.ec2_id[0]
+instance = ec2.Instance(id=instance_id)
+public_ip = "http://" + instance.public_ip_address
 
 
 # Basic single use... can be expanded to unclude db of users.
@@ -135,16 +147,16 @@ def dashboard():
         if request.form.get('state') == "update_state":
             updateInstaceState(instance_id)
             print("post")
-            return render_template('index.html', state=ec2_state)
+            return render_template('index.html', state=ec2_state, ip=public_ip)
 
         elif request.form.get('refresh') == "refresh":
-            return render_template('index.html', state=ec2_state)
+            return render_template('index.html', state=ec2_state, ip=public_ip)
 
         else:  # allows for support for other post requests.
-            return render_template('index.html', state=ec2_state)
+            return render_template('index.html', state=ec2_state, ip=public_ip)
 
     if request.method == 'GET':
-        return render_template('index.html', state=ec2_state)
+        return render_template('index.html', state=ec2_state, ip=public_ip)
 
 
 if __name__ == '__main__':
