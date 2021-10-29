@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, session, flash
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 from functools import wraps
 import boto3
 import argparse
@@ -103,6 +103,7 @@ def updateInstaceState(ec2_id):
 @socketio.on('connect')
 def connect():
     print("connected")
+
 
 @socketio.on('disconnect')
 def disconnect():
