@@ -3,7 +3,9 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 from functools import wraps
 import boto3
-import argparse
+# import argparse
+
+from dash_utils import fetch_instance_data, updateInstaceState
 
 
 app = Flask(__name__, static_url_path='/static')
@@ -12,18 +14,21 @@ socketio = SocketIO(app)
 CORS(app)
 
 ec2 = boto3.resource('ec2')  # Inits connection to aws.
-instance_id = 'i-0463a4a99fdb1a7f9'
+client = boto3.client('ec2')
+
+# instance_id = 'i-0463a4a99fdb1a7f9'
 
 # Add arguments
-parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('ec2_id', metavar='N', type=str, nargs='+',
-                help='id for the ec2 instance')
-args = parser.parse_args()
-
+# parser = argparse.ArgumentParser(description='Process some integers.')
+# parser.add_argument('ec2_id', metavar='N', type=str, nargs='+',
+                    # help='id for the ec2 instance')
+# args = parser.parse_args()
+#
 # Instance constants
-instance_id = args.ec2_id[0]
-instance = ec2.Instance(id=instance_id)
-public_ip = "http://" + instance.public_ip_address
+# instance_id = args.ec2_id[0]
+# instance = ec2.Instance(id=instance_id)
+# public_ip = "http://" + instance.public_ip_address
+instances = fetch_instance_data()  # From dash_utils... instance id: state, ip.
 
 
 # Basic single use... can be expanded to unclude db of users.
@@ -68,37 +73,8 @@ def login_required(f):
     return(wrap)
 
 
-def getInstanceState(ec2_id):
-    instance = ec2.Instance(id=ec2_id)
-    status = instance.state['Name']
-    print(status)
-    return status
-
-
-def updateInstaceState(ec2_id):
-    """Creates instance connection and will update
-    the state depending on the existing state.
-
-    Args:
-        ec2_id (str): ec2 instance id.
-    """
-    instance = ec2.Instance(id=ec2_id)
-    status = instance.state['Name']
-    print(status)
-
-    if status == "running":
-        instance.stop()
-    elif status == "stopping":
-        pass
-    elif status == "stopped":
-        instance.start()
-    elif status == "starting":
-        pass
-
-    return status
-
-
 # -------- Sockets -------- #
+
 
 @socketio.on('connect')
 def connect():
@@ -142,24 +118,26 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    ec2_state = getInstanceState(ec2_id=instance_id)
-    print(ec2_state)
-    if request.method == 'POST':
-        if request.form.get('state') == "update_state":
-            updateInstaceState(instance_id)
-            print("post")
-            return render_template('index.html', state=ec2_state, ip=public_ip)
+    # ec2_state = getInstanceState(ec2_id=instance_id)
+    # instances = fetch_instance_data()
+    # print(instances)
+    # if request.method == 'POST':
+    #     instance_id = request.form.get('instance_id')
+    #     if request.form.get('state') == "update_state":
+    #         updateInstaceState(instance_id)
+    #         print("post")
+    #         return render_template('index.html', instance=instances)
 
-        elif request.form.get('refresh') == "refresh":
-            return render_template('index.html', state=ec2_state, ip=public_ip)
+    #     elif request.form.get('refresh') == "refresh":
+    #         return render_template('index.html', instances=instances)
 
-        else:  # allows for support for other post requests.
-            return render_template('index.html', state=ec2_state, ip=public_ip)
+    #     else:  # allows for support for other post requests.
+    #         return render_template('index.html', instances=instances)
 
     if request.method == 'GET':
-        return render_template('index.html', state=ec2_state, ip=public_ip)
+        return render_template('index.html')
+        # , instances=instances)
 
 
 if __name__ == '__main__':
-
     app.run(host="0.0.0.0", port="5000", debug=True)
