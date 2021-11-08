@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 CORS(app)
 
 ec2 = boto3.resource('ec2')  # Inits connection to aws.
-client = boto3.client('ec2')
+client = boto3.client('ec2', region_name='us-west-2')
 
 # instance_id = 'i-0463a4a99fdb1a7f9'
 
