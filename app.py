@@ -28,7 +28,7 @@ client = boto3.client('ec2')
 # instance_id = args.ec2_id[0]
 # instance = ec2.Instance(id=instance_id)
 # public_ip = "http://" + instance.public_ip_address
-instances = fetch_instance_data()  # From dash_utils... instance id: state, ip.
+# instances = fetch_instance_data()  # From dash_utils... instance id: state, ip.
 
 
 # Basic single use... can be expanded to unclude db of users.
@@ -118,25 +118,22 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    # ec2_state = getInstanceState(ec2_id=instance_id)
-    # instances = fetch_instance_data()
-    # print(instances)
-    # if request.method == 'POST':
-    #     instance_id = request.form.get('instance_id')
-    #     if request.form.get('state') == "update_state":
-    #         updateInstaceState(instance_id)
-    #         print("post")
-    #         return render_template('index.html', instance=instances)
+    instances = fetch_instance_data()
+    print(instances)
+    if request.method == 'POST':
+        instance_id = request.form.get('instance_id')
+        if instance_id:
+            updateInstaceState(instance_id)
+            return render_template('index.html', instances=instances)
 
-    #     elif request.form.get('refresh') == "refresh":
-    #         return render_template('index.html', instances=instances)
+        elif request.form.get('refresh') == "refresh":
+            return render_template('index.html', instances=instances)
 
-    #     else:  # allows for support for other post requests.
-    #         return render_template('index.html', instances=instances)
+        else:  # allows for support for other post requests.
+            return render_template('index.html', instances=instances)
 
     if request.method == 'GET':
-        return render_template('index.html')
-        # , instances=instances)
+        return render_template('index.html', instances=instances)
 
 
 if __name__ == '__main__':
