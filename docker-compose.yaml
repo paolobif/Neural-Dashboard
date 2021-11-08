@@ -7,3 +7,4 @@ services:
     volumes:
       - ~/.aws:/root/.aws
     restart: always
+    entrypoint: ["python3", "app.py"]
